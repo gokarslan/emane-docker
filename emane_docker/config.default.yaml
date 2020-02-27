@@ -6,7 +6,7 @@
 # ordered list of control planes, currently sdn, ospf, olsr, olsrv2 and bgp are supported
 control_planes:
   - sdn
-  - olsrv2
+  - olsr
 # dataplane, only openflow and sonic are supported
 dataplane: openflow
 # Specifies the docker image for nodes. If the image is not present it will be pulled from DockerHub
@@ -36,6 +36,7 @@ emane_configuration:
 
 # Experiment configurations, if this does not exists or enabled is False, no experiment will be run.
 experiment:
+  enabled: True
   # Link update patterns. This triggers EMANE Pathloss events on devices.
   link_update:
     # <distribution>, values in seconds.
@@ -74,7 +75,7 @@ experiment:
     type: udp
 
   # Total duration of the experiment, in seconds.
-  duration: 100
+  duration: 5
 
 # none, random or a mobility file required
 # if random specified mobility_random_parameters will be used to generate Gaussian distributed

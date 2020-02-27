@@ -50,6 +50,8 @@ add-apt-repository \
 apt-get -y update && apt-get -y install docker-ce docker-ce-cli containerd.io
 pip3 install --upgrade pip
 pip3 install -r /root/emane-docker/requirements.txt
-cd /root && git clone https://github.com/adjacentlink/emane.git && cd emane && git checkout v1.2.4
-./autogen.sh && ./configure && make deb WITHOUT_PYTHON3=1
-cd .debbuild && dpkg -i *.deb && apt-get -y install -f && cd /root && rm -rf emane
+wget https://adjacentlink.com/downloads/emane/emane-1.2.5-release-1.ubuntu-18_04.amd64.tar.gz
+tar zxvf emane-1.2.5-release-1.ubuntu-18_04.amd64.tar.gz 
+cd emane-1.2.5-release-1/debs/ubuntu-18_04/amd64
+dpkg -i *.deb
+apt-get -y install -f

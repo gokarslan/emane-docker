@@ -43,7 +43,7 @@ class EventGenerator:
         self.event_service.publish(0, event)
 
     def _pick_random_nem(self):
-        return int(np.random.choice(self.nodes.keys()).split('-')[1])
+        return self.nodes[np.random.choice(list(self.nodes.keys()))].index + 1
 
     def _pick_random_db(self, is_binary):
         if is_binary:
@@ -70,7 +70,7 @@ class EventGenerator:
                 while nem1 == nem2:
                     nem2 = self._pick_random_nem()
                 db = self._pick_random_db(is_binary=True)
-                LOG.debug('New pathloss update at %f: node-%s node-%s %d', current_time, nem1, nem2,
+                LOG.debug('New pathloss update at %f: nem-%s nem-%s %d', current_time, nem1, nem2,
                           db)
                 self._create_pathloss(nem1, nem2, db)
             i += 1

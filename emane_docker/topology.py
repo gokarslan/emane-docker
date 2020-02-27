@@ -162,7 +162,7 @@ class Link:
 
 class EmaneTopology:
     def __init__(self, config):
-        file_loader = FileSystemLoader('evaluation/templates')
+        file_loader = FileSystemLoader('templates/emane')
         self.jinja_env = Environment(loader=file_loader)
         self.docker_client = docker.from_env()
         self.config = config
@@ -237,11 +237,11 @@ class EmaneTopology:
             with open('%s/olsrd.conf' % Constant.TEMPLATE_DIRECTORY, 'r') as f:
                 olsrd_conf_template = f.read()
 
-            with open('{}/olsrd.conf' % config_path, 'a') as f:
+            with open('%s/olsrd.conf' % config_path, 'a') as f:
                 f.write(olsrd_conf_template)
                 ifaces = '\nInterface '
-                for i in range(len(node.neighbors)):
-                    ifaces += '"i{}" '.format(i)
+                for i in range(1):
+                    ifaces += '"emane{}" '.format(i)
                 f.write(ifaces + '{}\n')
         elif control_plane == Constant.OLSRv2_CP:
             with open('%s/olsrd2.conf' % config_path, 'a') as f:
@@ -249,16 +249,17 @@ class EmaneTopology:
                 # '[global]\n\tfork 1\n\tplugin mpr\n\tplugin olsrv2\n\tplugin olsrv2info\n'
                 # TODO: END
                 # lans = ""
-                org = '1.0.0.0/8'
-                for interface_id, link in enumerate(node.links):
+                org = '10.100.0.%d/24' % (node.index + 1)
+                for interface_id, _ in enumerate(['emane0']):
                     # org = link.node1_ipv4 if node == link.node1 else link.node2_ipv4
-                    config = '[interface=i%d]\n' % interface_id
+                    config = '[interface=emane%d]\n' % interface_id
                     config = config + '\thello_interval 0.5\n\thello_validity 2.5\n\t'
                     config = config + 'ifaddr_filter default_accept\n\t'
                     # config = config + 'ifaddr_filter {}.0/24\n\t'.format(link.node1_ipv4[:-2])
                     # config = config + 'ifaddr_filter 1.0.0.0/8\n\t'
                     config = config + 'bindto default_reject\n'
-                    config = config + '\tbindto %s.0/24\n\n' % link.node1_ipv4[:-2]
+                    config = config + '\tbindto %s' % org
+                    # config = config + '\tbindto %s.0/24\n\n' % link.node1_ipv4[:-2]
                     # lans = lans + 'lan {}.0/24'.format(link.node1_ipv4[:-2]) + '\n\t'
                     f.write(config)
                     # break
@@ -507,7 +508,7 @@ class EmaneTopology:
         if self.platform == Constant.PLATFORM_DOCKER:
             for container in self.containers:
                 ip = str(self.docker_client.containers.get(container).attrs['NetworkSettings'][
-                    'Networks']['bridge']['IPAddress'])
+                    'Networks']['emanenode0']['IPAddress'])
                 self.redis_clients.append(Redis(host=ip, port=6379, db=0))
 
         else:
@@ -530,7 +531,7 @@ class EmaneTopology:
             # if command == 'init':
             #     for r in self.redis_clients:
             #         r.publish('cmd', 'init')
-            elif command == ('help', '?'):
+            elif command in ('help', '?'):
                 print('Available commands are:\n%s' % '\n'.join(['help', 'quit']))
             # TODO: update commands! END
             else:
@@ -544,7 +545,7 @@ class EmaneTopology:
         port = 20000 + node.index
         try:
             binding_path = os.getcwd() + '/container_helpers'
-            config_path = '/configs/' + node.name
+            config_path = binding_path + '/configs/' + node.name
             container = self.docker_client.containers.run(self.config['docker_image'], detach=True,
                                                           network=self.emane_interface,
                                                           mac_address='02:00:%02x:01:00:01' % (
@@ -686,7 +687,7 @@ class EmaneTopology:
             LOG.error('Unknown PHY layer %s', nem['phy'])
 
     def generate_emane_scenario_eel(self):
-        with open('evaluation/templates/scenario.eel', 'w') as f:
+        with open('templates/emane/scenario.eel', 'w') as f:
             # 0.0  nem:1 pathloss nem:2,50 nem:3,44 nem:4,45
             for node in self.nodes.values():
                 node_nem = node.name.replace('node-', 'nem:')
@@ -708,7 +709,7 @@ class EmaneTopology:
                                             '--uuidfile /var/run/emane.uuid')
 
     def start_emane_eventservice(self):
-        os.system('emaneeventservice -d evaluation/templates/eventservice.xml -l 3 -f '
+        os.system('emaneeventservice -d templates/emane/eventservice.xml -l 3 -f '
                   '/var/log/emaneeventservice.log --pidfile /var/run/emaneeventservice.pid '
                   '--uuidfile /var/run/emaneeventservice.uuid')
         LOG.debug('EMANE Event Service is started.')
@@ -744,7 +745,7 @@ class EmaneTopology:
         if 'experiment' in self.config and self.config['experiment'].get('enabled', False):
             if wait:
                 sleep_time = 1.0 * len(self.nodes)
-                LOG.info('Waiting for %d seconds before running the experiment')
+                LOG.info('Waiting for %.1f seconds before running the experiment', sleep_time)
                 sleep(sleep_time)
             LOG.info('Experiment is started.')
             self.start_traffic_generator()

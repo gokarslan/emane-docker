@@ -30,9 +30,9 @@ class TrafficGenerator:
 
     def start(self):
         flow_id = 0
-        for node in self.nodes:
+        for node, n in self.nodes.items():
             with open('%s/%s/mgen.in' % (Constant.CP_CONFIG_DIRECTORY, node), 'w') as f:
-                node_id = int(node.split('-')[1])
+                node_id = int(n.index + 1)
                 # If the node is server, listen at TCP port 5001
                 if self._is_server_node(node_id):
                     # f.write('0.0 LISTEN TCP 5001\n%.2f IGNORE TCP 5001\n' % self.duration)
