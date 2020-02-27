@@ -148,7 +148,7 @@ class Link:
 
     def contains(self, node1, node2=None):
         return (node1.name == self.node1.name and node2.name == self.node2.name) or (
-                node2.name == self.node1.name and node1.name == self.node2.name)
+            node2.name == self.node1.name and node1.name == self.node2.name)
 
     def __eq__(self, other):
         return (self.node1.name, self.node2.name) == (other.node1.name, other.node2.name)
@@ -507,7 +507,7 @@ class EmaneTopology:
         if self.platform == Constant.PLATFORM_DOCKER:
             for container in self.containers:
                 ip = str(self.docker_client.containers.get(container).attrs['NetworkSettings'][
-                             'Networks']['bridge']['IPAddress'])
+                    'Networks']['bridge']['IPAddress'])
                 self.redis_clients.append(Redis(host=ip, port=6379, db=0))
 
         else:
@@ -548,7 +548,7 @@ class EmaneTopology:
             container = self.docker_client.containers.run(self.config['docker_image'], detach=True,
                                                           network=self.emane_interface,
                                                           mac_address='02:00:%02x:01:00:01' % (
-                                                                  node.index + 1),
+                                                              node.index + 1),
                                                           cap_add=['sys_nice', 'NET_ADMIN'],
                                                           name=node.name,
                                                           privileged=True,
