@@ -29,6 +29,8 @@ MOCK_MODULES = ['emane', 'emane.events']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
+master_doc = 'index'
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
