@@ -1,0 +1,98 @@
+#
+# EMANE-Docker Default Configuration File v0.01
+#
+# -----------------------------
+
+# ordered list of control planes, currently sdn, ospf, olsr, olsrv2 and bgp are supported
+control_planes:
+  - sdn
+  - olsrv2
+# dataplane, only openflow and sonic are supported
+dataplane: openflow
+# Specifies the docker image for nodes. If the image is not present it will be pulled from DockerHub
+docker_image: gokarslan/emane-docker:0.0.1
+
+emane_configuration:
+  nem:
+    transport: transvirtual
+    mac: rfpipe
+    phy: precomputed
+  rfpipe:
+    datarate: 48K
+    # 'ieee80211abg': {
+    #     'mode': IEEE80211Mode.AG_OFDM.value,
+    #     'unicastrate': IEEE80211Rate.OFDM_48M.value,
+    #     'distance': 500,
+    #     'multicastrate': IEEE80211Rate.OFDM_12M.value
+    # },
+    # 'ieee80211abg': {
+    #     'mode': IEEE80211Mode.B_DSS.value,
+    #     'unicastrate': IEEE80211Rate.DSS_1M.value,
+    #     'distance': 500,
+    #     'multicastrate': IEEE80211Rate.DSS_1M.value
+    # }
+  precomputed:
+    bandwidth: 30M
+
+# Experiment configurations, if this does not exists or enabled is False, no experiment will be run.
+experiment:
+  # Link update patterns. This triggers EMANE Pathloss events on devices.
+  link_update:
+    # <distribution>, values in seconds.
+    #  exponential:
+    #    beta:
+    #      interval: [1, 5, 10]
+    single:
+      interval: [0.02083] # [4,2,1,0.5,0.25,0.125,0.0625] 0.03125 0.02083
+  # Traffic patterns. This triggers the traffic_generator triggering MGEN on the devices.
+  traffic:
+    # Flow arrival times
+    arrival:
+      # <distribution>, values in seconds
+      single:
+        interval: [2]
+    #    exponential:
+    #      beta:
+    #        interval: [2.5, 5, 10, 30, 60, 300]
+
+    bandwidth:
+      # <distribution>, values in kbps
+      single:
+        interval: [48] #, 5, 10, 48, 96, 128]
+
+    # Total flow size
+    flow_size:
+      # <distribution>, values in KB
+      #    exponential:
+      #      beta:
+      #        interval: [96]
+      single:
+        interval: [144]
+      is_limited: false
+
+    # Only tcp and udp are supported.
+    type: udp
+
+  # Total duration of the experiment, in seconds.
+  duration: 100
+
+# none, random or a mobility file required
+# if random specified mobility_random_parameters will be used to generate Gaussian distributed
+# random mobility patterns using link up and link down. All parameters are specified in seconds
+# if a mobility file is given that file will be used for updating topology
+# please refer to mobility.default.mob file to see an example mobility file
+mobility_pattern: none
+mobility_random_parameters:
+  mean: 3.0
+  variance: 1.0
+
+
+
+# This parameters allow nodes to announce extra IP prefixes for experimentation purposes.
+# The number is for an individual node. If it is 0, no extra IP prefixes will be announced.
+# Default: 0
+number_of_route_announcements: 0
+# Defines the dataplane platform, currently docker is supported
+platform: docker
+# Path to the initial topology file
+topology_file: emane_docker/topology.default.yaml

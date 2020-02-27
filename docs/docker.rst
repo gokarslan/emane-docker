@@ -1,3 +1,8 @@
+.. _docker:
+
+.. |docker-version| replace:: 0.0.1
+
+
 Building Docker Images
 =======================
 
@@ -12,6 +17,7 @@ EMANE-Docker platform comes with two Docker images listed in `docker/` folder.
 2. `docker/emane-docker`
     This is the main Docker image based on `docker/emane` and contains the routing protocols provided by `Quagga <https://github.com/Quagga/quagga>`_ , `OLSR <https://github.com/OLSR/olsrd>`_ and `OLSRv2 <https://github.com/OLSR/OON>`_.
 
+Current docker image version is |docker-version|.
 
 Building a Docker Image
 ------------------------------

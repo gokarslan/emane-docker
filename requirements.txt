@@ -1,0 +1,15 @@
+colorama
+docker
+jinja2
+matplotlib
+mock
+networkx
+pyfiglet
+pygraphviz
+pyyaml
+recommonmark
+redis
+setuptools
+sphinx
+sphinx-rtd-theme
+termcolor

@@ -1,0 +1,32 @@
+#
+# EMANE-Docker Default Topology File v0.01
+#
+# -----------------------------
+
+# The structure for node specification is
+# nodes:
+#   domain-1:[node-'11', node-'12', ...]
+#   ....
+#   domain-n:[node-x, node-y, ...]
+# is_border denotes whether node acts as a border router between companies
+# neighbors define the neighbors of the node, and it must be consistent with referred nodes' neighbors
+# The current topology structure only allows node names between 1-'12''15''15'
+# The node names must be globally unique.
+nodes:
+  companyA:
+    - name: '11'
+      is_border: True
+      neighbors: ['12', '13', '21', '22']
+    - name: '12'
+      is_border: True
+      neighbors: ['11', '13', '22']
+    - name: '13'
+      is_border: False
+      neighbors: ['11', '12']
+  companyB:
+    - name: '21'
+      is_border: True
+      neighbors: ['11', '22']
+    - name: '22'
+      is_border: True
+      neighbors: ['11', '12', '21']

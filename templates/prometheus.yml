@@ -1,0 +1,29 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+# - "first_rules.yml"
+# - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['localhost:9090', 'localhost:20000','localhost:20001','localhost:20002','localhost:20003','localhost:20004','localhost:20005','localhost:20006','localhost:20007','localhost:20008','localhost:20009','localhost:20010','localhost:20011','localhost:20012','localhost:20013','localhost:20014','localhost:20015','localhost:20016','localhost:20017','localhost:20018','localhost:20019','localhost:20020','localhost:20021','localhost:20022','localhost:20023','localhost:20024','localhost:20025','localhost:20026','localhost:20027','localhost:20028','localhost:20029','localhost:20030','localhost:20031','localhost:20032','localhost:20033','localhost:20034','localhost:20035','localhost:20036','localhost:20037','localhost:20038','localhost:20039','localhost:20040','localhost:20041','localhost:20042','localhost:20043','localhost:20044','localhost:20045','localhost:20046','localhost:20047','localhost:20048','localhost:20049','localhost:20050','localhost:20051','localhost:20052','localhost:20053','localhost:20054','localhost:20055','localhost:20056','localhost:20057','localhost:20058','localhost:20059','localhost:20060','localhost:20061','localhost:20062','localhost:20063','localhost:20064','localhost:20065','localhost:20066','localhost:20067','localhost:20068','localhost:20069','localhost:20070','localhost:20071','localhost:20072','localhost:20073','localhost:20074','localhost:20075','localhost:20076','localhost:20077','localhost:20078','localhost:20079','localhost:20080','localhost:20081','localhost:20082','localhost:20083','localhost:20084','localhost:20085','localhost:20086','localhost:20087','localhost:20088','localhost:20089','localhost:20090','localhost:20091','localhost:20092','localhost:20093','localhost:20094','localhost:20095','localhost:20096','localhost:20097','localhost:20098','localhost:20099','localhost:20100','localhost:20101','localhost:20102','localhost:20103','localhost:20104','localhost:20105','localhost:20106','localhost:20107','localhost:20108','localhost:20109','localhost:20110','localhost:20111','localhost:20112','localhost:20113','localhost:20114','localhost:20115','localhost:20116','localhost:20117','localhost:20118','localhost:20119','localhost:20120','localhost:20121','localhost:20122','localhost:20123','localhost:20124','localhost:20125','localhost:20126','localhost:20127']
